@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Công cụ SGM NETWORK</title>
+    <style>
+        @font-face {
+            font-family: 'GFF Latin';
+            src: url('./fonts/gff/GFF-Latin-Light.ttf') format('truetype');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'GFF Latin';
+            src: url('./fonts/gff/GFF-Latin-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'GFF Latin';
+            src: url('./fonts/gff/GFF-Latin-CdMedium.ttf') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'GFF Latin';
+            src: url('./fonts/gff/GFF-Latin-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'GFF Latin';
+            src: url('./fonts/gff/GFF-Latin-ExtraBold.ttf') format('truetype');
+            font-weight: 800;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'GFF Latin';
+            src: url('./fonts/gff/GFF-VN-Black.ttf') format('truetype');
+            font-weight: 900;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --bg: #0f1117;
+            --surface: #151923;
+            --surface-soft: #1b2230;
+            --surface-hover: #202838;
+            --border: #2a3446;
+            --text: #f7f9fc;
+            --muted: #9aa6b8;
+            --accent: #35c2ff;
+            --accent-strong: #6ee7b7;
+            --danger: #ff6b6b;
+            --shadow: 0 18px 45px rgba(0, 0, 0, 0.26);
+            --radius: 8px;
+            --font-main: 'GFF Latin', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+        }
+
+        html {
+            background: var(--bg);
+            color-scheme: dark;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 32px 20px;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .loader-container {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+
+        .loader {
+            width: 44px;
+            height: 44px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .page-shell {
+            width: min(1180px, 100%);
+            margin: 0 auto;
+        }
+
+        .header-container {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 28px;
+            align-items: end;
+            margin-bottom: 28px;
+            padding: 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .brand-mark {
+            width: 48px;
+            height: 48px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: var(--accent);
+            background: var(--surface-soft);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .brand-mark svg {
+            width: 26px;
+            height: 26px;
+        }
+
+        .main-title {
+            max-width: 760px;
+            font-size: clamp(2rem, 5vw, 4.2rem);
+            line-height: 0.95;
+            font-weight: 900;
+            color: var(--text);
+            text-transform: uppercase;
+        }
+
+        .sub-title {
+            max-width: 580px;
+            margin-top: 14px;
+            color: var(--muted);
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .header-meta {
+            min-width: 210px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .meta-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 14px 16px;
+            background: var(--surface-soft);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .meta-label {
+            color: var(--muted);
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .meta-value {
+            color: var(--text);
+            font-size: 1.18rem;
+            font-weight: 900;
+        }
+
+        .section-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            margin: 0 0 18px;
+        }
+
+        .section-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text);
+            text-transform: uppercase;
+        }
+
+        .section-note {
+            color: var(--muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .tool-card {
+            min-height: 270px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 0.45s ease, transform 0.45s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .tool-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tool-card:hover {
+            background: var(--surface-hover);
+            border-color: var(--accent);
+            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.22);
+            transform: translateY(-3px);
+        }
+
+        .tool-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .icon-wrapper {
+            width: 48px;
+            height: 48px;
+            flex: 0 0 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            background: var(--surface-soft);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .icon-wrapper svg {
+            width: 25px;
+            height: 25px;
+        }
+
+        .tool-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--accent-strong);
+            font-size: 0.76rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--accent-strong);
+            border-radius: 999px;
+        }
+
+        .tool-title {
+            min-height: 3.1em;
+            color: var(--text);
+            font-size: 1.2rem;
+            line-height: 1.28;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .tool-desc {
+            margin: 12px 0 24px;
+            color: var(--muted);
+            font-size: 0.94rem;
+            line-height: 1.62;
+            font-weight: 400;
+            flex-grow: 1;
+        }
+
+        .btn-main {
+            min-height: 46px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 16px;
+            background: var(--accent);
+            color: #061019;
+            border: 1px solid var(--accent);
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-size: 0.96rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .btn-main:hover,
+        .btn-main:focus-visible {
+            background: #73d9ff;
+            border-color: #73d9ff;
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        .btn-main svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .social-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+
+        .social-title {
+            color: var(--text);
+            font-size: 1rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .social-links {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .social-btn {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 16px;
+            color: var(--text);
+            background: var(--surface-soft);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 800;
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+
+        .social-btn:hover,
+        .social-btn:focus-visible {
+            color: var(--accent);
+            background: var(--surface-hover);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        .social-btn svg {
+            width: 21px;
+            height: 21px;
+            fill: currentColor;
+        }
+
+        .footer {
+            width: 100%;
+            padding: 24px 0 4px;
+            color: var(--muted);
+            text-align: center;
+            font-size: 0.92rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 780px) {
+            body {
+                padding: 16px;
+            }
+
+            .header-container {
+                grid-template-columns: 1fr;
+                padding: 22px;
+            }
+
+            .header-meta {
+                min-width: 0;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .section-bar,
+            .social-section {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tool-card {
+                min-height: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="loadingOverlay" class="loader-container">
+        <div class="loader"></div>
+    </div>
+
+    <div class="page-shell">
+        <header class="header-container">
+            <div>
+                <div class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5v-9Z"></path>
+                        <path d="M12 8v8"></path>
+                        <path d="m8.5 10 3.5-2 3.5 2"></path>
+                    </svg>
+                </div>
+                <h1 class="main-title" id="mainTitle">CÔNG CỤ SGM NETWORK</h1>
+                <p class="sub-title" id="subTitle">Không gian truy cập nhanh các công cụ Free Fire, được sắp xếp gọn gàng để thao tác nhanh và dễ quét thông tin.</p>
+            </div>
+            <div class="header-meta" aria-label="Thông tin tổng quan">
+                <div class="meta-card">
+                    <span class="meta-label">Công cụ</span>
+                    <strong class="meta-value" id="toolCount">0</strong>
+                </div>
+                <div class="meta-card">
+                    <span class="meta-label">Trạng thái</span>
+                    <strong class="meta-value">Online</strong>
+                </div>
+            </div>
+        </header>
+
+        <div class="section-bar">
+            <h2 class="section-title">Danh sách công cụ</h2>
+            <p class="section-note">Chọn một công cụ để mở trong tab mới</p>
+        </div>
+
+        <main id="toolsGrid" class="tools-grid"></main>
+
+        <section class="social-section">
+            <h3 class="social-title" id="socialTitle">Kết nối với chúng tôi</h3>
+            <div class="social-links">
+                <a href="https://www.facebook.com/hlinhdepzai0103" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Mở Facebook">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.414c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97H15.83c-1.49 0-1.955.93-1.955 1.885v2.265h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+                    <span>Facebook</span>
+                </a>
+            </div>
+        </section>
+
+        <footer class="footer" id="footerText"></footer>
+    </div>
+
+    <script>
+        const siteData = {
+            btnOpen: "TRUY CẬP",
+            footer: "Tất cả quyền được bảo lưu &copy; 2026 - SGM NETWORK",
+            tools: [
+                {
+                    title: "CẬP NHẬT SỰ KIỆN FF",
+                    desc: "Cập nhật biểu mẫu sự kiện trên toàn máy chủ trên thế giới, bao gồm hình ảnh quảng cáo và lịch trình sự kiện sắp tới.",
+                    url: "https://kingofgames02.github.io/FFGS-app/",
+                    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5v3"></path><path d="M16 2.5v3"></path><path d="M4.5 9h15"></path><rect x="4.5" y="5" width="15" height="16" rx="3"></rect><path d="m9 14 2 2 4-4"></path></svg>`
+                },
+                {
+                    title: "BỘ SƯU TẬP HÌNH ẢNH VẬT PHẨM",
+                    desc: "Một cơ sở dữ liệu toàn diện để dễ dàng duyệt, tìm kiếm và lọc tất cả vật phẩm Free Fire cùng với thông tin chi tiết.",
+                    url: "https://kingofgames02.github.io/Free-Fire-Items-Library/",
+                    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="7" height="7" rx="2"></rect><rect x="13.5" y="4" width="7" height="7" rx="2"></rect><rect x="3.5" y="14" width="7" height="7" rx="2"></rect><rect x="13.5" y="14" width="7" height="7" rx="2"></rect></svg>`
+                },
+                {
+                    title: "TRÌNH QUẢN LÝ DANH SÁCH MONG MUỐN",
+                    desc: "Quản lý danh sách mong muốn, thêm vật phẩm bằng ID và khám phá danh sách mong muốn của những người chơi khác.",
+                    url: "https://kingofgames02.github.io/FFWM-app/",
+                    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7.5c0 5.5-8 12-8 12s-8-6.5-8-12A4.5 4.5 0 0 1 12 4a4.5 4.5 0 0 1 8 3.5Z"></path><path d="m9.5 9.5 1.6 1.6 3.4-3.4"></path></svg>`
+                },
+                {
+                    title: "CỬA HÀNG PRIME",
+                    desc: "Khám phá cửa hàng Prime trên tất cả máy chủ.",
+                    url: "https://kingofgames02.github.io/FF-PrimeStore/",
+                    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8.5h11l1 12h-13l1-12Z"></path><path d="M9 8.5a3 3 0 0 1 6 0"></path><path d="M8 12.5h8"></path></svg>`
+                },
+                {
+                    title: "THƯ VIỆN THÀNH TỰU",
+                    desc: "Tra cứu thông tin về hệ thống thành tựu trong Free Fire.",
+                    url: "https://kingofgames02.github.io/FF-Achievement/",
+                    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0V4Z"></path><path d="M8 6H5.5A2.5 2.5 0 0 0 8 11"></path><path d="M16 6h2.5A2.5 2.5 0 0 1 16 11"></path><path d="M12 13v5"></path><path d="M8.5 20h7"></path></svg>`
+                },
+                {
+                    title: "ĐẾM NGƯỢC THỜI GIAN CẬP NHẬT",
+                    desc: "Theo dõi thời gian đếm ngược đến bản cập nhật OB mới.",
+                    url: "https://kingofgames02.github.io/Free-Fire-Patch-Tracker/",
+                    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"></circle><path d="M12 13V8"></path><path d="m12 13 3 2"></path><path d="M9 2.5h6"></path><path d="M12 2.5v2.5"></path></svg>`
+                },
+                {
+                    title: "API BIỂU TƯỢNG FF",
+                    desc: "Dịch vụ API giúp trích xuất nhanh biểu tượng PNG chất lượng cao của vật phẩm trong game bằng ID hoặc tên biểu tượng.",
+                    url: "http://kog-ff-icons-v1.vercel.app/",
+                    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9 5 12l3 3"></path><path d="m16 9 3 3-3 3"></path><path d="m13 6-2 12"></path><rect x="3" y="4" width="18" height="16" rx="3"></rect></svg>`
+                },
+                {
+                    title: "CÔNG CỤ GIẢI MÃ ASTC",
+                    desc: "Công cụ web giúp giải mã và hiển thị trực tiếp tệp kết cấu ASTC của Free Fire ngay trong trình duyệt.",
+                    url: "https://kingofgames02.github.io/astc_decoder_app/",
+                    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7.5l8 4.5 8-4.5L12 3Z"></path><path d="m4 12 8 4.5 8-4.5"></path><path d="m4 16.5 8 4.5 8-4.5"></path></svg>`
+                }
+            ]
+        };
+
+        function renderToolsGrid() {
+            const gridContainer = document.getElementById('toolsGrid');
+            gridContainer.innerHTML = '';
+
+            siteData.tools.forEach(tool => {
+                const cardHTML = `
+                    <div class="tool-card">
+                        <div class="tool-head">
+                            <div class="icon-wrapper">
+                                ${tool.icon}
+                            </div>
+                            <span class="tool-status"><span class="status-dot"></span>Sẵn sàng</span>
+                        </div>
+                        <h2 class="tool-title">${tool.title}</h2>
+                        <p class="tool-desc">${tool.desc}</p>
+                        <a href="${tool.url}" target="_blank" class="btn-main">
+                            <span>${siteData.btnOpen}</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+                        </a>
+                    </div>
+                `;
+                gridContainer.innerHTML += cardHTML;
+            });
+
+            document.getElementById('toolCount').textContent = siteData.tools.length;
+            document.getElementById('footerText').innerHTML = siteData.footer;
+            initScrollObserver();
+        }
+
+        function initScrollObserver() {
+            const observerOptions = {
+                threshold: 0.25,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const card = entry.target;
+                        card.classList.add('visible');
+
+                        observer.unobserve(card);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.tool-card').forEach(card => {
+                observer.observe(card);
+            });
+        }
+
+        window.onload = function() {
+            renderToolsGrid();
+            setTimeout(() => {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            }, 600);
+        };
+    </script>
+</body>
+</html>
