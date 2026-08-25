@@ -503,6 +503,12 @@
             pointer-events: none;
         }
 
+        #loadingOverlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
         .page-shell {
             width: min(1180px, 100%);
             margin: 0 auto;
@@ -691,6 +697,23 @@
             background: var(--surface-soft);
             color: #f5c542;
             border-color: #f5c542;
+            cursor: not-allowed;
+            opacity: 0.78;
+            pointer-events: none;
+        }
+
+        .tool-card.maintenance .tool-status {
+            color: var(--danger);
+        }
+
+        .tool-card.maintenance .status-dot {
+            background: var(--danger);
+        }
+
+        .tool-card.maintenance .btn-main {
+            background: var(--surface-soft);
+            color: var(--danger);
+            border-color: var(--danger);
             cursor: not-allowed;
             opacity: 0.78;
             pointer-events: none;
@@ -991,6 +1014,7 @@
                     title: "CẬP NHẬT SỰ KIỆN FF",
                     desc: "Cập nhật biểu mẫu sự kiện trên toàn máy chủ trên thế giới, bao gồm hình ảnh quảng cáo và lịch trình sự kiện sắp tới.",
                     url: "https://kingofgames02.github.io/FFGS-app/",
+                    status: "maintenance",
                     icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5v3"></path><path d="M16 2.5v3"></path><path d="M4.5 9h15"></path><rect x="4.5" y="5" width="15" height="16" rx="3"></rect><path d="m9 14 2 2 4-4"></path></svg>`
                 },
                 {
@@ -1040,8 +1064,8 @@
 
         const languageData = {
             vi: {
-                mainTitle: 'CÔNG CỤ SGM NETWORK',
-                subTitle: 'Không gian truy cập nhanh các công cụ Free Fire, được sắp xếp gọn gàng để thao tác nhanh và dễ quét thông tin.',
+                mainTitle: 'SGM NETWORK',
+                subTitle: 'Đây là không gian lưu trữ nội bộ dùng để phát triển hệ thống thuộc hệ sinh thái của SGM Network, trang này hiện không được công khai dưới bất kì hình thức nào.',
                 toolCountLabel: 'Công cụ',
                 onlineLabel: 'Trạng thái',
                 online: 'Online',
@@ -1063,6 +1087,7 @@
                 open: 'TRUY CẬP',
                 ready: 'SẴN SÀNG',
                 updating: 'ĐANG CẬP NHẬT',
+                maintenance: 'ĐANG BẢO TRÌ',
                 footer: 'Tất cả quyền được bảo lưu &copy; 2026 - SGM NETWORK',
                 titles: siteData.tools.map(tool => tool.title),
                 descriptions: siteData.tools.map(tool => tool.desc)
@@ -1091,6 +1116,7 @@
                 open: 'OPEN',
                 ready: 'READY',
                 updating: 'UPDATING',
+                maintenance: 'MAINTENANCE',
                 footer: 'All rights reserved &copy; 2026 - SGM NETWORK',
                 titles: [
                     'FF EVENT UPDATES',
@@ -1137,6 +1163,7 @@
                 open: '開啟',
                 ready: '就緒',
                 updating: '更新中',
+                maintenance: '維護中',
                 footer: '版權所有 &copy; 2026 - SGM NETWORK',
                 titles: [
                     'FF 活動更新',
@@ -1169,19 +1196,37 @@
             gridContainer.innerHTML = '';
 
             siteData.tools.forEach((tool, index) => {
-                const isUpdating = index >= 2;
+                const isMaintenance = tool.status === 'maintenance';
+                const isUpdating = !isMaintenance && index >= 2;
+                const cardClass = isMaintenance ? ' maintenance' : (isUpdating ? ' updating' : '');
+                let statusLabel, btnLabel, btnAttrs;
+
+                if (isMaintenance) {
+                    statusLabel = translations.maintenance;
+                    btnLabel = translations.maintenance;
+                    btnAttrs = 'aria-disabled="true" tabindex="-1"';
+                } else if (isUpdating) {
+                    statusLabel = translations.updating;
+                    btnLabel = translations.updating;
+                    btnAttrs = 'aria-disabled="true" tabindex="-1"';
+                } else {
+                    statusLabel = translations.ready;
+                    btnLabel = translations.open;
+                    btnAttrs = `href="${tool.url}" target="_blank" rel="noopener noreferrer"`;
+                }
+
                 const cardHTML = `
-                    <div class="tool-card${isUpdating ? ' updating' : ''}">
+                    <div class="tool-card${cardClass}">
                         <div class="tool-head">
                             <div class="icon-wrapper">
                                 ${tool.icon}
                             </div>
-                            <span class="tool-status"><span class="status-dot"></span>${isUpdating ? translations.updating : translations.ready}</span>
+                            <span class="tool-status"><span class="status-dot"></span>${statusLabel}</span>
                         </div>
                         <h2 class="tool-title">${translations.titles[index]}</h2>
                         <p class="tool-desc">${translations.descriptions[index]}</p>
-                        <a ${isUpdating ? 'aria-disabled="true" tabindex="-1"' : `href="${tool.url}" target="_blank" rel="noopener noreferrer"`} class="btn-main">
-                            <span>${isUpdating ? translations.updating : translations.open}</span>
+                        <a ${btnAttrs} class="btn-main">
+                            <span>${btnLabel}</span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
                         </a>
                     </div>
@@ -1314,11 +1359,20 @@
             requestAnimationFrame(updateProgress);
         }
 
-        window.onload = function() {
+        let _initialized = false;
+        function initApp() {
+            if (_initialized) return;
+            _initialized = true;
             renderToolsGrid();
             initSettings();
             startLoadingProgress();
-        };
+        }
+
+        document.addEventListener('DOMContentLoaded', initApp);
+        // Fallback nếu script chạy sau khi DOM đã sẵn sàng
+        if (document.readyState === 'interactive' || document.readyState === 'complete') {
+            initApp();
+        }
     </script>
 </body>
 </html>
