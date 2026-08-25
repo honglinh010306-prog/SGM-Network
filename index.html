@@ -558,6 +558,15 @@
             background: #f5c542;
         }
 
+        .tool-card.updating .btn-main {
+            background: var(--surface-soft);
+            color: #f5c542;
+            border-color: #f5c542;
+            cursor: not-allowed;
+            opacity: 0.78;
+            pointer-events: none;
+        }
+
         .status-dot {
             width: 7px;
             height: 7px;
@@ -882,15 +891,14 @@
             const gridContainer = document.getElementById('toolsGrid');
             gridContainer.innerHTML = '';
 
-            siteData.tools.forEach((tool, index) => {
-                const isUpdating = index >= 2;
+            siteData.tools.forEach(tool => {
                 const cardHTML = `
-                    <div class="tool-card${isUpdating ? ' updating' : ''}">
+                    <div class="tool-card">
                         <div class="tool-head">
                             <div class="icon-wrapper">
                                 ${tool.icon}
                             </div>
-                            <span class="tool-status"><span class="status-dot"></span>${isUpdating ? 'ĐANG CẬP NHẬT' : 'Sẵn sàng'}</span>
+                            <span class="tool-status"><span class="status-dot"></span>SẴN SÀNG</span>
                         </div>
                         <h2 class="tool-title">${tool.title}</h2>
                         <p class="tool-desc">${tool.desc}</p>
