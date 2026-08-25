@@ -106,6 +106,28 @@
             overflow-x: hidden;
         }
 
+        .corner-logo {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 20;
+            width: 58px;
+            height: 58px;
+            display: grid;
+            place-items: center;
+            padding: 9px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .corner-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
         .settings-trigger {
             position: fixed;
             top: 20px;
@@ -278,6 +300,61 @@
         .theme-toggle input:focus-visible + .theme-slider {
             outline: 2px solid var(--accent);
             outline-offset: 3px;
+        }
+
+        .logo-option {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .logo-choices {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .logo-choice {
+            position: relative;
+        }
+
+        .logo-choice input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .logo-choice label {
+            min-height: 92px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px;
+            color: var(--muted);
+            background: var(--surface-soft);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .logo-choice label:hover,
+        .logo-choice input:checked + label {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .logo-choice input:focus-visible + label {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        .logo-choice img {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
         }
 
         .settings-social {
@@ -682,6 +759,14 @@
                 right: 16px;
             }
 
+            .corner-logo {
+                top: 16px;
+                left: 16px;
+                width: 48px;
+                height: 48px;
+                padding: 7px;
+            }
+
             .settings-panel {
                 padding: 22px;
             }
@@ -694,6 +779,10 @@
     </style>
 </head>
 <body>
+
+    <div class="corner-logo" aria-label="Logo SGM Network">
+        <img id="cornerLogo" src="./LOGO%20PNG_LOGO%20WHITE.png" alt="Logo SGM Network">
+    </div>
 
     <button class="settings-trigger" id="settingsTrigger" type="button" aria-label="Mở cài đặt" aria-haspopup="dialog" aria-controls="settingsBackdrop">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v2.2"></path><path d="M12 18.8V21"></path><path d="m4.64 4.64 1.56 1.56"></path><path d="m17.8 17.8 1.56 1.56"></path><path d="M3 12h2.2"></path><path d="M18.8 12H21"></path><path d="m4.64 19.36 1.56-1.56"></path><path d="m17.8 6.2 1.56-1.56"></path><circle cx="12" cy="12" r="4"></circle></svg>
@@ -718,10 +807,29 @@
                     <span class="theme-slider"></span>
                 </label>
             </div>
+            <div class="settings-option logo-option">
+                <span class="settings-option-label">Logo góc trái</span>
+                <div class="logo-choices" role="radiogroup" aria-label="Chọn logo">
+                    <div class="logo-choice">
+                        <input type="radio" id="logoWhite" name="logoChoice" value="white">
+                        <label for="logoWhite">
+                            <img src="./LOGO%20PNG_LOGO%20WHITE.png" alt="">
+                            <span>Logo trắng</span>
+                        </label>
+                    </div>
+                    <div class="logo-choice">
+                        <input type="radio" id="logoBlack" name="logoChoice" value="black">
+                        <label for="logoBlack">
+                            <img src="./LOGO%20PNG_LOGO%20BLACK.png" alt="">
+                            <span>Logo đen</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
             <div class="settings-social">
                 <div class="settings-social-copy">
                     <strong>Kết nối mạng xã hội</strong>
-                    <span>Theo dõi SGM Network trên Facebook</span>
+                    <span>Liên hệ với chúng tôi</span>
                 </div>
                 <a class="settings-facebook" href="https://www.facebook.com/hlinhdepzai0103" target="_blank" rel="noopener noreferrer">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.414c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97H15.83c-1.49 0-1.955.93-1.955 1.885v2.265h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"></path></svg>
@@ -893,14 +1001,25 @@
             const settingsClose = document.getElementById('settingsClose');
             const themeToggle = document.getElementById('themeToggle');
             const themeLabel = document.getElementById('themeLabel');
+            const cornerLogo = document.getElementById('cornerLogo');
+            const logoChoices = document.querySelectorAll('input[name="logoChoice"]');
+
+            const applyLogo = (logo, saveChoice = true) => {
+                const logoFile = logo === 'black' ? 'LOGO%20PNG_LOGO%20BLACK.png' : 'LOGO%20PNG_LOGO%20WHITE.png';
+                cornerLogo.src = `./${logoFile}`;
+                document.getElementById(logo === 'black' ? 'logoBlack' : 'logoWhite').checked = true;
+                if (saveChoice) localStorage.setItem('sgm-logo', logo);
+            };
 
             const applyTheme = (isLight) => {
                 document.body.classList.toggle('light-mode', isLight);
                 themeToggle.checked = isLight;
                 themeLabel.textContent = isLight ? 'Giao diện sáng' : 'Giao diện tối';
                 localStorage.setItem('sgm-theme', isLight ? 'light' : 'dark');
+                if (!localStorage.getItem('sgm-logo')) applyLogo(isLight ? 'black' : 'white', false);
             };
 
+            applyLogo(localStorage.getItem('sgm-logo') || 'white', false);
             applyTheme(localStorage.getItem('sgm-theme') === 'light');
 
             const closeSettings = () => {
@@ -917,6 +1036,9 @@
                 if (event.target === settingsBackdrop) closeSettings();
             });
             themeToggle.addEventListener('change', () => applyTheme(themeToggle.checked));
+            logoChoices.forEach((choice) => {
+                choice.addEventListener('change', () => applyLogo(choice.value));
+            });
             document.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape' && !settingsBackdrop.classList.contains('hidden')) closeSettings();
             });
