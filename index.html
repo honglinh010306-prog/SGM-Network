@@ -304,6 +304,25 @@
             outline-offset: 3px;
         }
 
+        .language-select {
+            min-height: 40px;
+            max-width: 190px;
+            padding: 0 12px;
+            color: var(--text);
+            background: var(--surface-soft);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.86rem;
+            font-weight: 800;
+        }
+
+        .language-select:focus-visible {
+            border-color: var(--accent);
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
         .settings-social {
             align-items: flex-start;
         }
@@ -750,7 +769,7 @@
 
     <button class="settings-trigger" id="settingsTrigger" type="button" aria-label="Mở cài đặt" aria-haspopup="dialog" aria-controls="settingsBackdrop">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v2.2"></path><path d="M12 18.8V21"></path><path d="m4.64 4.64 1.56 1.56"></path><path d="m17.8 17.8 1.56 1.56"></path><path d="M3 12h2.2"></path><path d="M18.8 12H21"></path><path d="m4.64 19.36 1.56-1.56"></path><path d="m17.8 6.2 1.56-1.56"></path><circle cx="12" cy="12" r="4"></circle></svg>
-        <span>CÀI ĐẶT</span>
+        <span id="settingsTriggerLabel">CÀI ĐẶT</span>
     </button>
 
     <div class="settings-backdrop hidden" id="settingsBackdrop" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
@@ -758,7 +777,7 @@
             <div class="settings-heading">
                 <div>
                     <h2 class="settings-title" id="settingsTitle">Cài đặt</h2>
-                    <p class="settings-note">Tùy chỉnh trải nghiệm của bạn</p>
+                    <p class="settings-note" id="settingsNote">Tùy chỉnh trải nghiệm của bạn</p>
                 </div>
                 <button class="settings-close" id="settingsClose" type="button" aria-label="Đóng cài đặt">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12"></path><path d="m18 6-12 12"></path></svg>
@@ -771,10 +790,18 @@
                     <span class="theme-slider"></span>
                 </label>
             </div>
+            <div class="settings-option">
+                <label class="settings-option-label" id="languageLabel" for="languageSelect">Ngôn ngữ</label>
+                <select class="language-select" id="languageSelect" aria-labelledby="languageLabel">
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="en">English</option>
+                    <option value="zh-Hant">繁體中文</option>
+                </select>
+            </div>
             <div class="settings-social">
                 <div class="settings-social-copy">
-                    <strong>Kết nối mạng xã hội</strong>
-                    <span>Liên hệ với chúng tôi</span>
+                    <strong id="socialSettingsTitle">Kết nối mạng xã hội</strong>
+                    <span id="socialSettingsNote">Liên hệ với chúng tôi</span>
                 </div>
                 <a class="settings-facebook" href="https://www.facebook.com/hlinhdepzai0103" target="_blank" rel="noopener noreferrer">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.414c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97H15.83c-1.49 0-1.955.93-1.955 1.885v2.265h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"></path></svg>
@@ -803,19 +830,19 @@
             </div>
             <div class="header-meta" aria-label="Thông tin tổng quan">
                 <div class="meta-card">
-                    <span class="meta-label">Công cụ</span>
+                    <span class="meta-label" id="toolCountLabel">Công cụ</span>
                     <strong class="meta-value" id="toolCount">0</strong>
                 </div>
                 <div class="meta-card">
-                    <span class="meta-label">Trạng thái</span>
+                    <span class="meta-label" id="onlineLabel">Trạng thái</span>
                     <strong class="meta-value">Online</strong>
                 </div>
             </div>
         </header>
 
         <div class="section-bar">
-            <h2 class="section-title">Danh sách công cụ</h2>
-            <p class="section-note">Chọn một công cụ để mở trong tab mới</p>
+            <h2 class="section-title" id="toolsTitle">Danh sách công cụ</h2>
+            <p class="section-note" id="toolsNote">Chọn một công cụ để mở trong tab mới</p>
         </div>
 
         <main id="toolsGrid" class="tools-grid"></main>
@@ -889,8 +916,131 @@
             ]
         };
 
+        const languageData = {
+            vi: {
+                mainTitle: 'CÔNG CỤ SGM NETWORK',
+                subTitle: 'Không gian truy cập nhanh các công cụ Free Fire, được sắp xếp gọn gàng để thao tác nhanh và dễ quét thông tin.',
+                toolCountLabel: 'Công cụ',
+                onlineLabel: 'Trạng thái',
+                online: 'Online',
+                settingsTrigger: 'CÀI ĐẶT',
+                settingsOpenLabel: 'Mở cài đặt',
+                closeSettingsLabel: 'Đóng cài đặt',
+                overviewLabel: 'Thông tin tổng quan',
+                settings: 'Cài đặt',
+                settingsNote: 'Tùy chỉnh trải nghiệm của bạn',
+                themeDark: 'Giao diện tối',
+                themeLight: 'Giao diện sáng',
+                language: 'Ngôn ngữ',
+                socialTitle: 'Kết nối mạng xã hội',
+                socialNote: 'Liên hệ với chúng tôi',
+                toolsTitle: 'Danh sách công cụ',
+                toolsNote: 'Chọn một công cụ để mở trong tab mới',
+                socialSection: 'Kết nối với chúng tôi',
+                open: 'TRUY CẬP',
+                ready: 'SẴN SÀNG',
+                updating: 'ĐANG CẬP NHẬT',
+                footer: 'Tất cả quyền được bảo lưu &copy; 2026 - SGM NETWORK',
+                titles: siteData.tools.map(tool => tool.title),
+                descriptions: siteData.tools.map(tool => tool.desc)
+            },
+            en: {
+                mainTitle: 'SGM NETWORK TOOLS',
+                subTitle: 'A streamlined space for quick access to Free Fire tools, organized for fast actions and easy scanning.',
+                toolCountLabel: 'Tools',
+                onlineLabel: 'Status',
+                online: 'Online',
+                settingsTrigger: 'SETTINGS',
+                settingsOpenLabel: 'Open settings',
+                closeSettingsLabel: 'Close settings',
+                overviewLabel: 'Overview',
+                settings: 'Settings',
+                settingsNote: 'Customize your experience',
+                themeDark: 'Dark mode',
+                themeLight: 'Light mode',
+                language: 'Language',
+                socialTitle: 'Social networks',
+                socialNote: 'Connect with us',
+                toolsTitle: 'Tool list',
+                toolsNote: 'Choose a tool to open in a new tab',
+                socialSection: 'Connect with us',
+                open: 'OPEN',
+                ready: 'READY',
+                updating: 'UPDATING',
+                footer: 'All rights reserved &copy; 2026 - SGM NETWORK',
+                titles: [
+                    'FF EVENT UPDATES',
+                    'FREE FIRE ITEMS IMAGE COLLECTION',
+                    'WISHLIST MANAGER',
+                    'PRIME STORE',
+                    'ACHIEVEMENT LIBRARY',
+                    'UPDATE COUNTDOWN',
+                    'FF ICON API',
+                    'ASTC DECODER TOOL'
+                ],
+                descriptions: [
+                    'Updates event forms across servers worldwide, including promotional images and upcoming event schedules.',
+                    'A complete database for browsing, searching, and filtering Free Fire items with detailed information.',
+                    'Manage your wishlist, add items by ID, and explore other players\' wishlists.',
+                    'Explore the Prime Store across all servers.',
+                    'Look up information about the Free Fire achievement system.',
+                    'Track the countdown to the next OB update.',
+                    'An API service for quickly extracting high-quality PNG item icons by ID or icon name.',
+                    'A web tool for decoding and displaying Free Fire ASTC texture files directly in your browser.'
+                ]
+            },
+            'zh-Hant': {
+                mainTitle: 'SGM NETWORK 工具',
+                subTitle: '快速存取 Free Fire 工具的整合空間，內容井然有序，方便操作與瀏覽。',
+                toolCountLabel: '工具',
+                onlineLabel: '狀態',
+                online: '線上',
+                settingsTrigger: '設定',
+                settingsOpenLabel: '開啟設定',
+                closeSettingsLabel: '關閉設定',
+                overviewLabel: '總覽資訊',
+                settings: '設定',
+                settingsNote: '自訂您的使用體驗',
+                themeDark: '深色模式',
+                themeLight: '淺色模式',
+                language: '語言',
+                socialTitle: '社群網路',
+                socialNote: '與我們聯絡',
+                toolsTitle: '工具清單',
+                toolsNote: '選擇工具以在新分頁開啟',
+                socialSection: '與我們聯絡',
+                open: '開啟',
+                ready: '就緒',
+                updating: '更新中',
+                footer: '版權所有 &copy; 2026 - SGM NETWORK',
+                titles: [
+                    'FF 活動更新',
+                    'Free Fire 物品圖片收藏',
+                    '願望清單管理器',
+                    'Prime 商店',
+                    '成就圖書館',
+                    '更新倒數計時',
+                    'FF 圖示 API',
+                    'ASTC 解碼工具'
+                ],
+                descriptions: [
+                    '更新全球各伺服器的活動表單，包含宣傳圖片與即將推出的活動時間表。',
+                    '完整的資料庫，可瀏覽、搜尋及篩選所有 Free Fire 物品與詳細資訊。',
+                    '管理願望清單、依 ID 新增物品，並探索其他玩家的願望清單。',
+                    '探索所有伺服器的 Prime 商店。',
+                    '查詢 Free Fire 成就系統的相關資訊。',
+                    '追蹤下一次 OB 更新的倒數時間。',
+                    '透過 ID 或圖示名稱快速取得高品質 PNG 物品圖示的 API 服務。',
+                    '在瀏覽器中直接解碼並顯示 Free Fire ASTC 材質檔案的網頁工具。'
+                ]
+            }
+        };
+
+        let currentLanguage = localStorage.getItem('sgm-language') || 'vi';
+
         function renderToolsGrid() {
             const gridContainer = document.getElementById('toolsGrid');
+            const translations = languageData[currentLanguage];
             gridContainer.innerHTML = '';
 
             siteData.tools.forEach((tool, index) => {
@@ -901,12 +1051,12 @@
                             <div class="icon-wrapper">
                                 ${tool.icon}
                             </div>
-                            <span class="tool-status"><span class="status-dot"></span>${isUpdating ? 'ĐANG CẬP NHẬT' : 'SẴN SÀNG'}</span>
+                            <span class="tool-status"><span class="status-dot"></span>${isUpdating ? translations.updating : translations.ready}</span>
                         </div>
-                        <h2 class="tool-title">${tool.title}</h2>
-                        <p class="tool-desc">${tool.desc}</p>
+                        <h2 class="tool-title">${translations.titles[index]}</h2>
+                        <p class="tool-desc">${translations.descriptions[index]}</p>
                         <a ${isUpdating ? 'aria-disabled="true" tabindex="-1"' : `href="${tool.url}" target="_blank" rel="noopener noreferrer"`} class="btn-main">
-                            <span>${isUpdating ? 'ĐANG CẬP NHẬT' : siteData.btnOpen}</span>
+                            <span>${isUpdating ? translations.updating : translations.open}</span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
                         </a>
                     </div>
@@ -915,8 +1065,36 @@
             });
 
             document.getElementById('toolCount').textContent = siteData.tools.length;
-            document.getElementById('footerText').innerHTML = siteData.footer;
+            document.getElementById('footerText').innerHTML = translations.footer;
             initScrollObserver();
+        }
+
+        function applyLanguage(language) {
+            currentLanguage = languageData[language] ? language : 'vi';
+            const translations = languageData[currentLanguage];
+
+            document.documentElement.lang = currentLanguage;
+            document.getElementById('settingsTriggerLabel').textContent = translations.settingsTrigger;
+            document.getElementById('settingsTrigger').setAttribute('aria-label', translations.settingsOpenLabel);
+            document.getElementById('settingsClose').setAttribute('aria-label', translations.closeSettingsLabel);
+            document.querySelector('.header-meta').setAttribute('aria-label', translations.overviewLabel);
+            document.getElementById('mainTitle').textContent = translations.mainTitle;
+            document.getElementById('subTitle').textContent = translations.subTitle;
+            document.getElementById('toolCountLabel').textContent = translations.toolCountLabel;
+            document.getElementById('onlineLabel').textContent = translations.onlineLabel;
+            document.querySelector('.meta-value:not(#toolCount)').textContent = translations.online;
+            document.getElementById('settingsTitle').textContent = translations.settings;
+            document.getElementById('settingsNote').textContent = translations.settingsNote;
+            document.getElementById('themeLabel').textContent = document.getElementById('themeToggle').checked ? translations.themeLight : translations.themeDark;
+            document.getElementById('languageLabel').textContent = translations.language;
+            document.getElementById('socialSettingsTitle').textContent = translations.socialTitle;
+            document.getElementById('socialSettingsNote').textContent = translations.socialNote;
+            document.getElementById('toolsTitle').textContent = translations.toolsTitle;
+            document.getElementById('toolsNote').textContent = translations.toolsNote;
+            document.getElementById('socialTitle').textContent = translations.socialSection;
+            document.getElementById('languageSelect').value = currentLanguage;
+            localStorage.setItem('sgm-language', currentLanguage);
+            renderToolsGrid();
         }
 
         function initScrollObserver() {
@@ -948,6 +1126,7 @@
             const themeToggle = document.getElementById('themeToggle');
             const themeLabel = document.getElementById('themeLabel');
             const cornerLogo = document.getElementById('cornerLogo');
+            const languageSelect = document.getElementById('languageSelect');
 
             const applyLogo = (isLight) => {
                 const logoFile = isLight ? 'LOGO%20PNG_LOGO%20BLACK.png' : 'LOGO%20PNG_LOGO%20WHITE.png';
@@ -957,7 +1136,7 @@
             const applyTheme = (isLight) => {
                 document.body.classList.toggle('light-mode', isLight);
                 themeToggle.checked = isLight;
-                themeLabel.textContent = isLight ? 'Giao diện sáng' : 'Giao diện tối';
+                themeLabel.textContent = isLight ? languageData[currentLanguage].themeLight : languageData[currentLanguage].themeDark;
                 localStorage.setItem('sgm-theme', isLight ? 'light' : 'dark');
                 applyLogo(isLight);
             };
@@ -978,6 +1157,8 @@
                 if (event.target === settingsBackdrop) closeSettings();
             });
             themeToggle.addEventListener('change', () => applyTheme(themeToggle.checked));
+            languageSelect.addEventListener('change', () => applyLanguage(languageSelect.value));
+            applyLanguage(currentLanguage);
             document.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape' && !settingsBackdrop.classList.contains('hidden')) closeSettings();
             });
