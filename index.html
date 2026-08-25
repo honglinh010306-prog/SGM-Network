@@ -891,19 +891,20 @@
             const gridContainer = document.getElementById('toolsGrid');
             gridContainer.innerHTML = '';
 
-            siteData.tools.forEach(tool => {
+            siteData.tools.forEach((tool, index) => {
+                const isUpdating = index >= 2;
                 const cardHTML = `
-                    <div class="tool-card">
+                    <div class="tool-card${isUpdating ? ' updating' : ''}">
                         <div class="tool-head">
                             <div class="icon-wrapper">
                                 ${tool.icon}
                             </div>
-                            <span class="tool-status"><span class="status-dot"></span>SẴN SÀNG</span>
+                            <span class="tool-status"><span class="status-dot"></span>${isUpdating ? 'ĐANG CẬP NHẬT' : 'SẴN SÀNG'}</span>
                         </div>
                         <h2 class="tool-title">${tool.title}</h2>
                         <p class="tool-desc">${tool.desc}</p>
-                        <a href="${tool.url}" target="_blank" rel="noopener noreferrer" class="btn-main">
-                            <span>${siteData.btnOpen}</span>
+                        <a ${isUpdating ? 'aria-disabled="true" tabindex="-1"' : `href="${tool.url}" target="_blank" rel="noopener noreferrer"`} class="btn-main">
+                            <span>${isUpdating ? 'ĐANG CẬP NHẬT' : siteData.btnOpen}</span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
                         </a>
                     </div>
