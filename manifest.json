@@ -1,0 +1,15 @@
+{
+  "short_name": "FF Library",
+  "name": "Free Fire Items Library",
+  "icons": [
+    {
+      "src": "LOGO PNG_LOGO BLACK.png",
+      "sizes": "751x751",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#040d1f",
+  "background_color": "#040d1f"
+}

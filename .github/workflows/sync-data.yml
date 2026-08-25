@@ -1,0 +1,48 @@
+name: Sync Data & Fetch Icons
+
+on:
+  schedule:
+    - cron: '0 */1 * * *'   # Tự chạy mỗi 1 tiếng 1 lần để giảm chậm trễ
+  workflow_dispatch:           # Cho phép chạy thủ công trên GitHub Actions
+
+jobs:
+  sync-and-fetch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo này
+        uses: actions/checkout@v4
+
+      - name: Tải ItemsData_en.json mới nhất từ Library
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/KingofGames02/Free-Fire-Items-Library/main/ItemsData_en.json" \
+            -o ItemsData_en.json
+
+      - name: Tải CollectionBanner.json mới nhất
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/KingofGames02/Free-Fire-Items-Library/main/CollectionBanner.json" \
+            -o CollectionBanner.json
+
+      - name: Tải ignore_list.json mới nhất
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/KingofGames02/Free-Fire-Items-Library/main/ignore_list.json" \
+            -o ignore_list.json
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Chạy fetch icons
+        run: node fetch-icons.js
+
+      - name: Dịch dữ liệu sang VN & ZH tự động
+        run: node translate-data.js
+
+      - name: Commit và push nếu có thay đổi
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto-synced data & icons [1h]"
+          file_pattern: 'ItemsData_en.json ItemsData_vn.json ItemsData_zh.json CollectionBanner.json ignore_list.json icons/ updated_icons.json'

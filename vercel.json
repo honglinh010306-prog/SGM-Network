@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/(en|vn|zh)", "destination": "/" },
+    { "source": "/(en|vn|zh)/:itemId", "destination": "/" },
+    { "source": "/(en|vn|zh)/:itemId/", "destination": "/" }
+  ]
+}
