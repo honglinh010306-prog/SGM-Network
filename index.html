@@ -874,14 +874,14 @@
             const gridContainer = document.getElementById('toolsGrid');
             gridContainer.innerHTML = '';
 
-            siteData.tools.forEach(tool => {
+            siteData.tools.forEach((tool, index) => {
                 const cardHTML = `
                     <div class="tool-card">
                         <div class="tool-head">
                             <div class="icon-wrapper">
                                 ${tool.icon}
                             </div>
-                            <span class="tool-status"><span class="status-dot"></span>Sẵn sàng</span>
+                            <span class="tool-status"><span class="status-dot"></span>${index < 2 ? 'Sẵn sàng' : 'ĐANG CẬP NHẬT'}</span>
                         </div>
                         <h2 class="tool-title">${tool.title}</h2>
                         <p class="tool-desc">${tool.desc}</p>
