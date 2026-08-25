@@ -69,6 +69,19 @@
             --font-main: 'GFF Latin', sans-serif;
         }
 
+        body.light-mode {
+            --bg: #f3f7fb;
+            --surface: #ffffff;
+            --surface-soft: #eaf1f7;
+            --surface-hover: #e1edf6;
+            --border: #cbd8e5;
+            --text: #142131;
+            --muted: #5f7082;
+            --accent: #087ea4;
+            --accent-strong: #138a62;
+            --shadow: 0 18px 45px rgba(31, 63, 91, 0.14);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -81,12 +94,232 @@
             color-scheme: dark;
         }
 
+        html:has(body.light-mode) {
+            color-scheme: light;
+        }
+
         body {
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
             padding: 32px 20px;
             overflow-x: hidden;
+        }
+
+        .settings-trigger {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 20;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 0 15px;
+            color: var(--text);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            font-size: 0.84rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .settings-trigger:hover,
+        .settings-trigger:focus-visible {
+            color: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        .settings-trigger svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .settings-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            background: rgba(4, 9, 16, 0.66);
+            opacity: 1;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+
+        .settings-backdrop.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .settings-panel {
+            width: min(430px, 100%);
+            padding: 26px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .settings-heading {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+
+        .settings-title {
+            color: var(--text);
+            font-size: 1.45rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .settings-note {
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .settings-close {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 36px;
+            color: var(--muted);
+            background: var(--surface-soft);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+        }
+
+        .settings-close:hover,
+        .settings-close:focus-visible {
+            color: var(--accent);
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .settings-close svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .settings-option,
+        .settings-social {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 16px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .settings-option-label,
+        .settings-social-copy strong {
+            color: var(--text);
+            font-size: 0.98rem;
+            font-weight: 800;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            flex: 0 0 52px;
+        }
+
+        .theme-toggle input {
+            width: 1px;
+            height: 1px;
+            position: absolute;
+            opacity: 0;
+        }
+
+        .theme-slider {
+            position: absolute;
+            inset: 0;
+            background: var(--border);
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .theme-slider::before {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            top: 3px;
+            left: 3px;
+            background: var(--surface);
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle input:checked + .theme-slider {
+            background: var(--accent);
+        }
+
+        .theme-toggle input:checked + .theme-slider::before {
+            transform: translateX(24px);
+        }
+
+        .theme-toggle input:focus-visible + .theme-slider {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        .settings-social {
+            align-items: flex-start;
+        }
+
+        .settings-social-copy {
+            display: grid;
+            gap: 4px;
+        }
+
+        .settings-social-copy span {
+            color: var(--muted);
+            font-size: 0.8rem;
+        }
+
+        .settings-facebook {
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 12px;
+            color: var(--text);
+            background: var(--surface-soft);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-size: 0.84rem;
+            font-weight: 800;
+        }
+
+        .settings-facebook:hover,
+        .settings-facebook:focus-visible {
+            color: var(--accent);
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .settings-facebook svg {
+            width: 17px;
+            height: 17px;
+            fill: currentColor;
         }
 
         a {
@@ -417,7 +650,7 @@
 
         @media (max-width: 780px) {
             body {
-                padding: 16px;
+                padding: 78px 16px 16px;
             }
 
             .header-container {
@@ -443,11 +676,60 @@
             .tool-card {
                 min-height: 0;
             }
+
+            .settings-trigger {
+                top: 16px;
+                right: 16px;
+            }
+
+            .settings-panel {
+                padding: 22px;
+            }
+
+            .settings-social {
+                flex-direction: column;
+            }
         }
 
     </style>
 </head>
 <body>
+
+    <button class="settings-trigger" id="settingsTrigger" type="button" aria-label="Mở cài đặt" aria-haspopup="dialog" aria-controls="settingsBackdrop">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v2.2"></path><path d="M12 18.8V21"></path><path d="m4.64 4.64 1.56 1.56"></path><path d="m17.8 17.8 1.56 1.56"></path><path d="M3 12h2.2"></path><path d="M18.8 12H21"></path><path d="m4.64 19.36 1.56-1.56"></path><path d="m17.8 6.2 1.56-1.56"></path><circle cx="12" cy="12" r="4"></circle></svg>
+        <span>CÀI ĐẶT</span>
+    </button>
+
+    <div class="settings-backdrop hidden" id="settingsBackdrop" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+        <section class="settings-panel">
+            <div class="settings-heading">
+                <div>
+                    <h2 class="settings-title" id="settingsTitle">Cài đặt</h2>
+                    <p class="settings-note">Tùy chỉnh trải nghiệm của bạn</p>
+                </div>
+                <button class="settings-close" id="settingsClose" type="button" aria-label="Đóng cài đặt">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12"></path><path d="m18 6-12 12"></path></svg>
+                </button>
+            </div>
+            <div class="settings-option">
+                <span class="settings-option-label" id="themeLabel">Giao diện tối</span>
+                <label class="theme-toggle">
+                    <input type="checkbox" id="themeToggle" aria-labelledby="themeLabel">
+                    <span class="theme-slider"></span>
+                </label>
+            </div>
+            <div class="settings-social">
+                <div class="settings-social-copy">
+                    <strong>Kết nối mạng xã hội</strong>
+                    <span>Theo dõi SGM Network trên Facebook</span>
+                </div>
+                <a class="settings-facebook" href="https://www.facebook.com/hlinhdepzai0103" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.414c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97H15.83c-1.49 0-1.955.93-1.955 1.885v2.265h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"></path></svg>
+                    <span>Facebook</span>
+                </a>
+            </div>
+        </section>
+    </div>
 
     <div id="loadingOverlay" class="loader-container">
         <div class="loader"></div>
@@ -605,8 +887,44 @@
             });
         }
 
+        function initSettings() {
+            const settingsTrigger = document.getElementById('settingsTrigger');
+            const settingsBackdrop = document.getElementById('settingsBackdrop');
+            const settingsClose = document.getElementById('settingsClose');
+            const themeToggle = document.getElementById('themeToggle');
+            const themeLabel = document.getElementById('themeLabel');
+
+            const applyTheme = (isLight) => {
+                document.body.classList.toggle('light-mode', isLight);
+                themeToggle.checked = isLight;
+                themeLabel.textContent = isLight ? 'Giao diện sáng' : 'Giao diện tối';
+                localStorage.setItem('sgm-theme', isLight ? 'light' : 'dark');
+            };
+
+            applyTheme(localStorage.getItem('sgm-theme') === 'light');
+
+            const closeSettings = () => {
+                settingsBackdrop.classList.add('hidden');
+                settingsTrigger.focus();
+            };
+
+            settingsTrigger.addEventListener('click', () => {
+                settingsBackdrop.classList.remove('hidden');
+                settingsClose.focus();
+            });
+            settingsClose.addEventListener('click', closeSettings);
+            settingsBackdrop.addEventListener('click', (event) => {
+                if (event.target === settingsBackdrop) closeSettings();
+            });
+            themeToggle.addEventListener('change', () => applyTheme(themeToggle.checked));
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && !settingsBackdrop.classList.contains('hidden')) closeSettings();
+            });
+        }
+
         window.onload = function() {
             renderToolsGrid();
+            initSettings();
             setTimeout(() => {
                 document.getElementById('loadingOverlay').classList.add('hidden');
             }, 600);
