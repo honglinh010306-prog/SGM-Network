@@ -842,6 +842,418 @@
             font-weight: 500;
         }
 
+        /* ── BANNED POPUP ── */
+        .banned-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(4, 9, 16, 0.75);
+            opacity: 1;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+
+        .banned-backdrop.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .banned-card {
+            width: min(420px, 100%);
+            background: var(--surface);
+            border: 1px solid rgba(255, 107, 107, 0.45);
+            border-radius: 14px;
+            box-shadow: 0 0 0 1px rgba(255, 107, 107, 0.1), 0 32px 80px rgba(0, 0, 0, 0.55);
+            overflow: hidden;
+            animation: loginSlideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .banned-header {
+            padding: 28px 28px 20px;
+            text-align: center;
+            background: linear-gradient(160deg, rgba(255, 107, 107, 0.1) 0%, transparent 60%);
+            border-bottom: 1px solid rgba(255, 107, 107, 0.2);
+        }
+
+        .banned-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 16px;
+            display: grid;
+            place-items: center;
+            background: rgba(255, 107, 107, 0.12);
+            border: 1px solid rgba(255, 107, 107, 0.35);
+            border-radius: 50%;
+        }
+
+        .banned-icon svg {
+            width: 28px;
+            height: 28px;
+            color: var(--danger);
+        }
+
+        .banned-title {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--danger);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .banned-body {
+            padding: 22px 28px 28px;
+            display: grid;
+            gap: 20px;
+        }
+
+        .banned-message {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--muted);
+            line-height: 1.65;
+            text-align: center;
+        }
+
+        .banned-message strong {
+            color: var(--text);
+            font-weight: 800;
+        }
+
+        .btn-banned-close {
+            height: 46px;
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(255, 107, 107, 0.12);
+            color: var(--danger);
+            border: 1px solid rgba(255, 107, 107, 0.4);
+            border-radius: var(--radius);
+            font-size: 0.92rem;
+            font-family: var(--font-main);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .btn-banned-close:hover {
+            background: rgba(255, 107, 107, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .btn-banned-close svg { width: 16px; height: 16px; }
+        /* ── END BANNED POPUP ── */
+
+        /* ── LOGIN OVERLAY ── */
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background:
+                linear-gradient(rgba(3, 7, 13, 0.88), rgba(3, 7, 13, 0.95)),
+                url('./361b072124e0e479833da4e10834916b.jpg') center / cover fixed;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .login-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .login-card {
+            width: min(420px, 100%);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(53, 194, 255, 0.08);
+            overflow: hidden;
+            animation: loginSlideUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes loginSlideUp {
+            from { opacity: 0; transform: translateY(28px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .login-header {
+            padding: 36px 36px 28px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(160deg, rgba(53, 194, 255, 0.06) 0%, transparent 60%);
+        }
+
+        .login-logo-wrap {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 20px;
+            display: grid;
+            place-items: center;
+            padding: 14px;
+            background: rgba(12, 20, 32, 0.7);
+            border: 1px solid rgba(53, 194, 255, 0.25);
+            border-radius: 50%;
+            box-shadow: 0 0 0 8px rgba(53, 194, 255, 0.05), 0 0 28px rgba(53, 194, 255, 0.2);
+        }
+
+        .login-logo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .login-subtitle {
+            margin-top: 6px;
+            font-size: 0.83rem;
+            font-weight: 500;
+            color: var(--muted);
+            letter-spacing: 0.04em;
+        }
+
+        .login-body {
+            padding: 32px 36px 36px;
+            display: grid;
+            gap: 18px;
+        }
+
+        .login-field {
+            display: grid;
+            gap: 7px;
+        }
+
+        .login-label {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .login-input-wrap {
+            position: relative;
+        }
+
+        .login-input-wrap svg.field-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 17px;
+            height: 17px;
+            color: var(--muted);
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+
+        .login-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 44px 0 42px;
+            background: var(--surface-soft);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-size: 0.93rem;
+            font-weight: 500;
+            font-family: var(--font-main);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .login-input::placeholder {
+            color: var(--muted);
+            opacity: 0.6;
+        }
+
+        .login-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(53, 194, 255, 0.12);
+        }
+
+        .login-input:focus + svg.field-icon,
+        .login-input-wrap:focus-within svg.field-icon {
+            color: var(--accent);
+        }
+
+        .login-input.error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.12);
+        }
+
+        .toggle-pw {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            background: none;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .toggle-pw:hover { color: var(--accent); }
+        .toggle-pw svg { width: 17px; height: 17px; }
+
+        .login-error {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 14px;
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: var(--radius);
+            color: var(--danger);
+            font-size: 0.83rem;
+            font-weight: 700;
+            opacity: 0;
+            transform: translateY(-6px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
+        }
+
+        .login-error.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .login-error svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+        .btn-login {
+            height: 50px;
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--accent);
+            color: #061019;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 0.96rem;
+            font-family: var(--font-main);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+            margin-top: 4px;
+        }
+
+        .btn-login:hover {
+            background: #73d9ff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(53, 194, 255, 0.3);
+        }
+
+        .btn-login:active { transform: translateY(0); }
+
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-login svg { width: 18px; height: 18px; }
+
+        .btn-login .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(6, 16, 25, 0.3);
+            border-top-color: #061019;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Nút logout trên header */
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 130px;
+            z-index: 20;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 14px;
+            color: var(--danger);
+            background: var(--surface);
+            border: 1px solid var(--danger);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            font-size: 0.84rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-family: var(--font-main);
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .logout-btn:hover { background: rgba(255, 107, 107, 0.1); transform: translateY(-2px); }
+        .logout-btn svg { width: 16px; height: 16px; }
+
+        .login-welcome {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 16px;
+            height: 44px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .login-welcome strong { color: var(--accent); font-weight: 900; }
+
+        @media (max-width: 780px) {
+            .logout-btn { right: 16px; top: 70px; }
+            .login-welcome { display: none; }
+            .login-body { padding: 24px 24px 28px; }
+            .login-header { padding: 28px 24px 22px; }
+        }
+
+        /* ── END LOGIN OVERLAY ── */
+
         @media (max-width: 780px) {
             body {
                 padding: 78px 16px 16px;
@@ -944,6 +1356,95 @@
             </div>
         </section>
     </div>
+
+    <!-- BANNED POPUP -->
+    <div class="banned-backdrop hidden" id="bannedBackdrop" role="alertdialog" aria-modal="true" aria-labelledby="bannedTitle">
+        <div class="banned-card">
+            <div class="banned-header">
+                <div class="banned-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                    </svg>
+                </div>
+                <h2 class="banned-title" id="bannedTitle">Tài khoản bị khóa</h2>
+            </div>
+            <div class="banned-body">
+                <p class="banned-message">
+                    Tài khoản <strong id="bannedUsername"></strong> đã bị khóa vĩnh viễn do bạn đã hết ủy quyền của SGM Network hoặc cố tình thực hiện một cuộc tấn công mạng.
+                </p>
+                <button class="btn-banned-close" id="btnBannedClose" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12"/><path d="m18 6-12 12"/></svg>
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN OVERLAY -->
+    <div class="login-overlay" id="loginOverlay" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo-wrap">
+                    <img src="./LOGO%20PNG_LOGO%20WHITE.png" alt="SGM Network Logo" id="loginLogo">
+                </div>
+                <h1 class="login-title" id="loginTitle">SGM NETWORK</h1>
+                <p class="login-subtitle">Đăng nhập để tiếp tục</p>
+            </div>
+            <div class="login-body">
+                <div class="login-field">
+                    <label class="login-label" for="loginUsername">Tên đăng nhập</label>
+                    <div class="login-input-wrap">
+                        <input
+                            class="login-input"
+                            type="text"
+                            id="loginUsername"
+                            name="username"
+                            placeholder="Nhập tên đăng nhập"
+                            autocomplete="username"
+                            spellcheck="false"
+                        >
+                        <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                    </div>
+                </div>
+                <div class="login-field">
+                    <label class="login-label" for="loginPassword">Mật khẩu</label>
+                    <div class="login-input-wrap">
+                        <input
+                            class="login-input"
+                            type="password"
+                            id="loginPassword"
+                            name="password"
+                            placeholder="Nhập mật khẩu"
+                            autocomplete="current-password"
+                        >
+                        <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        <button class="toggle-pw" type="button" id="togglePw" aria-label="Hiện/ẩn mật khẩu">
+                            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="login-error" id="loginError" role="alert" aria-live="polite">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+                    <span id="loginErrorText">Tên đăng nhập hoặc mật khẩu không đúng.</span>
+                </div>
+                <button class="btn-login" id="btnLogin" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                    <span id="btnLoginText">ĐĂNG NHẬP</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGOUT BUTTON & WELCOME (hiện sau khi đăng nhập) -->
+    <div class="login-welcome hidden" id="loginWelcome">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Xin chào, <strong id="loginWelcomeName"></strong>
+    </div>
+    <button class="logout-btn hidden" id="logoutBtn" type="button" aria-label="Đăng xuất">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Đăng xuất
+    </button>
 
     <div id="loadingOverlay" class="loader-container">
         <div class="loader-content" role="status" aria-live="polite">
@@ -1359,18 +1860,194 @@
             requestAnimationFrame(updateProgress);
         }
 
+        /* ── AUTH ── */
+        const AUTH = {
+            CREDENTIALS: [
+                { username: 'honglinh@sgm',  password: 'honglinh010306' },
+                { username: 'hacker@arex',   password: 'hacker34323@arex' }
+            ],
+            BANNED: [
+                { username: 'hacker@arex', password: 'hacker34323@arex' }
+            ],
+            SESSION_KEY: 'sgm_auth',
+
+            isLoggedIn() {
+                return sessionStorage.getItem(this.SESSION_KEY) === '1';
+            },
+            isBanned(username, password) {
+                return this.BANNED.some(b => b.username === username && b.password === password);
+            },
+            login(username, password) {
+                return this.CREDENTIALS.some(c => c.username === username && c.password === password);
+            },
+            save(username) {
+                sessionStorage.setItem(this.SESSION_KEY, '1');
+                sessionStorage.setItem(this.SESSION_KEY + '_user', username);
+            },
+            getUser() {
+                return sessionStorage.getItem(this.SESSION_KEY + '_user') || '';
+            },
+            clear() {
+                sessionStorage.removeItem(this.SESSION_KEY);
+                sessionStorage.removeItem(this.SESSION_KEY + '_user');
+            }
+        };
+
+        function initLogin() {
+            const overlay       = document.getElementById('loginOverlay');
+            const usernameInput = document.getElementById('loginUsername');
+            const passwordInput = document.getElementById('loginPassword');
+            const btnLogin      = document.getElementById('btnLogin');
+            const btnLoginText  = document.getElementById('btnLoginText');
+            const loginError    = document.getElementById('loginError');
+            const loginErrorText = document.getElementById('loginErrorText');
+            const togglePw      = document.getElementById('togglePw');
+            const eyeIcon       = document.getElementById('eyeIcon');
+            const logoutBtn     = document.getElementById('logoutBtn');
+            const loginWelcome  = document.getElementById('loginWelcome');
+            const loginWelcomeName = document.getElementById('loginWelcomeName');
+            const loginLogo     = document.getElementById('loginLogo');
+            const bannedBackdrop  = document.getElementById('bannedBackdrop');
+            const bannedUsername  = document.getElementById('bannedUsername');
+            const btnBannedClose  = document.getElementById('btnBannedClose');
+
+            // Đồng bộ logo login với theme
+            const syncLoginLogo = () => {
+                const isLight = document.body.classList.contains('light-mode');
+                loginLogo.src = isLight ? './LOGO%20PNG_LOGO%20BLACK.png' : './LOGO%20PNG_LOGO%20WHITE.png';
+            };
+            syncLoginLogo();
+            // Theo dõi thay đổi theme
+            new MutationObserver(syncLoginLogo).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
+            const showError = (msg) => {
+                loginErrorText.textContent = msg;
+                loginError.classList.add('visible');
+                usernameInput.classList.add('error');
+                passwordInput.classList.add('error');
+            };
+
+            const clearError = () => {
+                loginError.classList.remove('visible');
+                usernameInput.classList.remove('error');
+                passwordInput.classList.remove('error');
+            };
+
+            const setLoading = (on) => {
+                btnLogin.disabled = on;
+                btnLoginText.textContent = on ? '' : 'ĐĂNG NHẬP';
+                btnLogin.innerHTML = on
+                    ? '<span class="spinner"></span>'
+                    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg><span id="btnLoginText">ĐĂNG NHẬP</span>`;
+            };
+
+            const doLogin = () => {
+                clearError();
+                const u = usernameInput.value.trim();
+                const p = passwordInput.value;
+
+                if (!u) { showError('Vui lòng nhập tên đăng nhập.'); usernameInput.focus(); return; }
+                if (!p) { showError('Vui lòng nhập mật khẩu.'); passwordInput.focus(); return; }
+
+                setLoading(true);
+                // Giả lập delay xác thực nhẹ cho UX
+                setTimeout(() => {
+                    if (AUTH.isBanned(u, p)) {
+                        setLoading(false);
+                        bannedUsername.textContent = u;
+                        bannedBackdrop.classList.remove('hidden');
+                        passwordInput.value = '';
+                    } else if (AUTH.login(u, p)) {
+                        AUTH.save(u);
+                        loginWelcomeName.textContent = u;
+                        overlay.classList.add('hidden');
+                        logoutBtn.classList.remove('hidden');
+                        loginWelcome.classList.remove('hidden');
+                        // Chạy app sau khi đăng nhập
+                        initApp();
+                    } else {
+                        setLoading(false);
+                        showError('Tên đăng nhập hoặc mật khẩu không đúng.');
+                        passwordInput.value = '';
+                        passwordInput.focus();
+                    }
+                }, 600);
+            };
+
+            // Toggle hiện/ẩn mật khẩu
+            togglePw.addEventListener('click', () => {
+                const isHidden = passwordInput.type === 'password';
+                passwordInput.type = isHidden ? 'text' : 'password';
+                eyeIcon.innerHTML = isHidden
+                    ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+                    : '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>';
+            });
+
+            btnLogin.addEventListener('click', doLogin);
+
+            // Đóng popup banned
+            btnBannedClose.addEventListener('click', () => {
+                bannedBackdrop.classList.add('hidden');
+                usernameInput.focus();
+            });
+            bannedBackdrop.addEventListener('click', (e) => {
+                if (e.target === bannedBackdrop) {
+                    bannedBackdrop.classList.add('hidden');
+                    usernameInput.focus();
+                }
+            });
+
+            // Enter để đăng nhập
+            [usernameInput, passwordInput].forEach(el => {
+                el.addEventListener('keydown', (e) => { if (e.key === 'Enter') doLogin(); });
+                el.addEventListener('input', clearError);
+            });
+
+            // Đăng xuất
+            logoutBtn.addEventListener('click', () => {
+                AUTH.clear();
+                logoutBtn.classList.add('hidden');
+                loginWelcome.classList.add('hidden');
+                overlay.classList.remove('hidden');
+                usernameInput.value = '';
+                passwordInput.value = '';
+                clearError();
+                setTimeout(() => usernameInput.focus(), 100);
+            });
+
+            // Kiểm tra session còn không
+            if (AUTH.isLoggedIn()) {
+                loginWelcomeName.textContent = AUTH.getUser();
+                overlay.classList.add('hidden');
+                logoutBtn.classList.remove('hidden');
+                loginWelcome.classList.remove('hidden');
+            } else {
+                // Chặn page-shell cho đến khi đăng nhập
+                setTimeout(() => usernameInput.focus(), 300);
+            }
+        }
+        /* ── END AUTH ── */
+
+        let _loginInit = false;
         let _initialized = false;
+
         function initApp() {
             if (_initialized) return;
+            // Chỉ chạy nếu đã đăng nhập
+            if (!AUTH.isLoggedIn()) return;
             _initialized = true;
             renderToolsGrid();
             initSettings();
             startLoadingProgress();
         }
 
-        document.addEventListener('DOMContentLoaded', initApp);
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!_loginInit) { _loginInit = true; initLogin(); }
+            initApp();
+        });
         // Fallback nếu script chạy sau khi DOM đã sẵn sàng
         if (document.readyState === 'interactive' || document.readyState === 'complete') {
+            if (!_loginInit) { _loginInit = true; initLogin(); }
             initApp();
         }
     </script>
