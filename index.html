@@ -372,24 +372,128 @@
         .loader-container {
             position: fixed;
             inset: 0;
-            background: var(--bg);
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+            background:
+                linear-gradient(rgba(3, 7, 13, 0.82), rgba(3, 7, 13, 0.9)),
+                url('./361b072124e0e479833da4e10834916b.jpg') center / cover;
             z-index: 9999;
-            transition: opacity 0.35s ease, visibility 0.35s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
 
-        .loader {
-            width: 44px;
-            height: 44px;
-            border: 3px solid var(--border);
-            border-top-color: var(--accent);
+        .loader-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg, transparent 35%, rgba(53, 194, 255, 0.1) 50%, transparent 65%);
+            transform: translateX(-100%);
+            animation: loadingSweep 2.6s ease-in-out infinite;
+        }
+
+        .loader-content {
+            position: relative;
+            z-index: 1;
+            width: min(360px, calc(100% - 40px));
+            display: grid;
+            justify-items: center;
+            text-align: center;
+        }
+
+        .loader-logo {
+            width: 94px;
+            height: 94px;
+            display: grid;
+            place-items: center;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.28);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            background: rgba(12, 20, 32, 0.62);
+            box-shadow: 0 0 0 10px rgba(53, 194, 255, 0.06), 0 0 38px rgba(53, 194, 255, 0.3);
+            animation: loadingPulse 2s ease-in-out infinite;
         }
 
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .loader-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .loader-title {
+            margin-top: 25px;
+            color: #f7f9fc;
+            font-size: 1.45rem;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .loader-status {
+            margin-top: 9px;
+            color: rgba(247, 249, 252, 0.72);
+            font-size: 0.84rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .loader-progress {
+            width: 100%;
+            height: 4px;
+            margin-top: 25px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+        }
+
+        .loader-progress::after {
+            content: '';
+            display: block;
+            width: 42%;
+            height: 100%;
+            background: var(--accent);
+            border-radius: inherit;
+            box-shadow: 0 0 14px var(--accent);
+            animation: loadingProgress 1.5s ease-in-out infinite;
+        }
+
+        .loader-dots {
+            display: flex;
+            gap: 7px;
+            margin-top: 19px;
+        }
+
+        .loader-dots span {
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: loadingDot 1.2s ease-in-out infinite;
+        }
+
+        .loader-dots span:nth-child(2) { animation-delay: 0.15s; }
+        .loader-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes loadingSweep {
+            0%, 20% { transform: translateX(-100%); }
+            70%, 100% { transform: translateX(100%); }
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes loadingProgress {
+            0% { transform: translateX(-120%); }
+            100% { transform: translateX(340%); }
+        }
+
+        @keyframes loadingDot {
+            0%, 100% { opacity: 0.3; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-3px); }
+        }
 
         .hidden {
             opacity: 0;
@@ -812,7 +916,15 @@
     </div>
 
     <div id="loadingOverlay" class="loader-container">
-        <div class="loader"></div>
+        <div class="loader-content" role="status" aria-live="polite">
+            <div class="loader-logo">
+                <img src="./LOGO%20PNG_LOGO%20WHITE.png" alt="SGM Network">
+            </div>
+            <strong class="loader-title">SGM NETWORK</strong>
+            <span class="loader-status" id="loadingStatus">Đang tải dữ liệu</span>
+            <div class="loader-progress" aria-hidden="true"></div>
+            <div class="loader-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+        </div>
     </div>
 
     <div class="page-shell">
@@ -927,6 +1039,7 @@
                 settingsOpenLabel: 'Mở cài đặt',
                 closeSettingsLabel: 'Đóng cài đặt',
                 overviewLabel: 'Thông tin tổng quan',
+                loadingStatus: 'Đang tải dữ liệu',
                 settings: 'Cài đặt',
                 settingsNote: 'Tùy chỉnh trải nghiệm của bạn',
                 themeDark: 'Giao diện tối',
@@ -954,6 +1067,7 @@
                 settingsOpenLabel: 'Open settings',
                 closeSettingsLabel: 'Close settings',
                 overviewLabel: 'Overview',
+                loadingStatus: 'Loading data',
                 settings: 'Settings',
                 settingsNote: 'Customize your experience',
                 themeDark: 'Dark mode',
@@ -999,6 +1113,7 @@
                 settingsOpenLabel: '開啟設定',
                 closeSettingsLabel: '關閉設定',
                 overviewLabel: '總覽資訊',
+                loadingStatus: '正在載入資料',
                 settings: '設定',
                 settingsNote: '自訂您的使用體驗',
                 themeDark: '深色模式',
@@ -1075,6 +1190,7 @@
 
             document.documentElement.lang = currentLanguage;
             document.getElementById('settingsTriggerLabel').textContent = translations.settingsTrigger;
+            document.getElementById('loadingStatus').textContent = translations.loadingStatus;
             document.getElementById('settingsTrigger').setAttribute('aria-label', translations.settingsOpenLabel);
             document.getElementById('settingsClose').setAttribute('aria-label', translations.closeSettingsLabel);
             document.querySelector('.header-meta').setAttribute('aria-label', translations.overviewLabel);
