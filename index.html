@@ -302,61 +302,6 @@
             outline-offset: 3px;
         }
 
-        .logo-option {
-            align-items: flex-start;
-            flex-direction: column;
-        }
-
-        .logo-choices {
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        .logo-choice {
-            position: relative;
-        }
-
-        .logo-choice input {
-            position: absolute;
-            opacity: 0;
-        }
-
-        .logo-choice label {
-            min-height: 92px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 10px;
-            color: var(--muted);
-            background: var(--surface-soft);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            cursor: pointer;
-            font-size: 0.82rem;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        .logo-choice label:hover,
-        .logo-choice input:checked + label {
-            color: var(--accent);
-            border-color: var(--accent);
-        }
-
-        .logo-choice input:focus-visible + label {
-            outline: 2px solid var(--accent);
-            outline-offset: 3px;
-        }
-
-        .logo-choice img {
-            width: 42px;
-            height: 42px;
-            object-fit: contain;
-        }
-
         .settings-social {
             align-items: flex-start;
         }
@@ -807,25 +752,6 @@
                     <span class="theme-slider"></span>
                 </label>
             </div>
-            <div class="settings-option logo-option">
-                <span class="settings-option-label">Logo góc trái</span>
-                <div class="logo-choices" role="radiogroup" aria-label="Chọn logo">
-                    <div class="logo-choice">
-                        <input type="radio" id="logoWhite" name="logoChoice" value="white">
-                        <label for="logoWhite">
-                            <img src="./LOGO%20PNG_LOGO%20WHITE.png" alt="">
-                            <span>Logo trắng</span>
-                        </label>
-                    </div>
-                    <div class="logo-choice">
-                        <input type="radio" id="logoBlack" name="logoChoice" value="black">
-                        <label for="logoBlack">
-                            <img src="./LOGO%20PNG_LOGO%20BLACK.png" alt="">
-                            <span>Logo đen</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
             <div class="settings-social">
                 <div class="settings-social-copy">
                     <strong>Kết nối mạng xã hội</strong>
@@ -1002,13 +928,10 @@
             const themeToggle = document.getElementById('themeToggle');
             const themeLabel = document.getElementById('themeLabel');
             const cornerLogo = document.getElementById('cornerLogo');
-            const logoChoices = document.querySelectorAll('input[name="logoChoice"]');
 
-            const applyLogo = (logo, saveChoice = true) => {
-                const logoFile = logo === 'black' ? 'LOGO%20PNG_LOGO%20BLACK.png' : 'LOGO%20PNG_LOGO%20WHITE.png';
+            const applyLogo = (isLight) => {
+                const logoFile = isLight ? 'LOGO%20PNG_LOGO%20BLACK.png' : 'LOGO%20PNG_LOGO%20WHITE.png';
                 cornerLogo.src = `./${logoFile}`;
-                document.getElementById(logo === 'black' ? 'logoBlack' : 'logoWhite').checked = true;
-                if (saveChoice) localStorage.setItem('sgm-logo', logo);
             };
 
             const applyTheme = (isLight) => {
@@ -1016,10 +939,9 @@
                 themeToggle.checked = isLight;
                 themeLabel.textContent = isLight ? 'Giao diện sáng' : 'Giao diện tối';
                 localStorage.setItem('sgm-theme', isLight ? 'light' : 'dark');
-                if (!localStorage.getItem('sgm-logo')) applyLogo(isLight ? 'black' : 'white', false);
+                applyLogo(isLight);
             };
 
-            applyLogo(localStorage.getItem('sgm-logo') || 'white', false);
             applyTheme(localStorage.getItem('sgm-theme') === 'light');
 
             const closeSettings = () => {
@@ -1036,9 +958,6 @@
                 if (event.target === settingsBackdrop) closeSettings();
             });
             themeToggle.addEventListener('change', () => applyTheme(themeToggle.checked));
-            logoChoices.forEach((choice) => {
-                choice.addEventListener('change', () => applyLogo(choice.value));
-            });
             document.addEventListener('keydown', (event) => {
                 if (event.key === 'Escape' && !settingsBackdrop.classList.contains('hidden')) closeSettings();
             });
