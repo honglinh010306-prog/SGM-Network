@@ -447,15 +447,22 @@
             border-radius: 999px;
         }
 
-        .loader-progress::after {
-            content: '';
+        .loader-progress-bar {
             display: block;
-            width: 42%;
+            width: 0%;
             height: 100%;
             background: var(--accent);
             border-radius: inherit;
             box-shadow: 0 0 14px var(--accent);
-            animation: loadingProgress 1.5s ease-in-out infinite;
+            transition: width 0.08s linear;
+        }
+
+        .loader-percent {
+            margin-top: 11px;
+            color: rgba(247, 249, 252, 0.86);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
         }
 
         .loader-dots {
@@ -483,11 +490,6 @@
         @keyframes loadingPulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
-        }
-
-        @keyframes loadingProgress {
-            0% { transform: translateX(-120%); }
-            100% { transform: translateX(340%); }
         }
 
         @keyframes loadingDot {
@@ -927,7 +929,10 @@
             </div>
             <strong class="loader-title">SGM NETWORK</strong>
             <span class="loader-status" id="loadingStatus">Đang tải dữ liệu</span>
-            <div class="loader-progress" aria-hidden="true"></div>
+            <div class="loader-progress" role="progressbar" aria-label="Loading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <span class="loader-progress-bar" id="loaderProgressBar"></span>
+            </div>
+            <span class="loader-percent" id="loaderPercent">0%</span>
             <div class="loader-dots" aria-hidden="true"><span></span><span></span><span></span></div>
         </div>
     </div>
@@ -1285,12 +1290,34 @@
             });
         }
 
+        function startLoadingProgress() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const progress = loadingOverlay.querySelector('.loader-progress');
+            const progressBar = document.getElementById('loaderProgressBar');
+            const percentLabel = document.getElementById('loaderPercent');
+            const duration = 900;
+            const startTime = performance.now();
+
+            const updateProgress = (currentTime) => {
+                const percent = Math.min(100, Math.round(((currentTime - startTime) / duration) * 100));
+                progressBar.style.width = `${percent}%`;
+                percentLabel.textContent = `${percent}%`;
+                progress.setAttribute('aria-valuenow', percent);
+
+                if (percent < 100) {
+                    requestAnimationFrame(updateProgress);
+                } else {
+                    loadingOverlay.classList.add('hidden');
+                }
+            };
+
+            requestAnimationFrame(updateProgress);
+        }
+
         window.onload = function() {
             renderToolsGrid();
             initSettings();
-            setTimeout(() => {
-                document.getElementById('loadingOverlay').classList.add('hidden');
-            }, 600);
+            startLoadingProgress();
         };
     </script>
 </body>
