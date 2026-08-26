@@ -1248,57 +1248,138 @@
         @media (max-width: 780px) {
             .logout-btn { right: 16px; top: 70px; }
             .login-welcome { display: none; }
-            .login-body { padding: 24px 24px 28px; }
-            .login-header { padding: 28px 24px 22px; }
+            .login-body { padding: 20px 20px 24px; }
+            .login-header { padding: 24px 20px 18px; }
+            .login-logo-wrap { width: 58px; height: 58px; margin-bottom: 14px; }
+            .login-title { font-size: 1.2rem; }
+            .login-subtitle { font-size: 0.78rem; }
+            .login-input { height: 44px; font-size: 0.88rem; }
+            .btn-login { height: 46px; font-size: 0.9rem; }
+            .login-lang-wrap { padding: 12px 20px; }
         }
+
+        /* Language selector trong login */
+        .login-lang-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 36px;
+            border-top: 1px solid var(--border);
+            background: var(--surface-soft);
+        }
+
+        .login-lang-icon {
+            width: 15px;
+            height: 15px;
+            color: var(--muted);
+            flex-shrink: 0;
+        }
+
+        .login-lang-select {
+            background: transparent;
+            border: none;
+            color: var(--muted);
+            font-size: 0.8rem;
+            font-weight: 700;
+            font-family: var(--font-main);
+            cursor: pointer;
+            outline: none;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: color 0.15s;
+        }
+
+        .login-lang-select:hover,
+        .login-lang-select:focus { color: var(--accent); }
+        .login-lang-select option { background: var(--bg); color: var(--text); }
 
         /* ── END LOGIN OVERLAY ── */
 
         @media (max-width: 780px) {
             body {
-                padding: 78px 16px 16px;
+                padding: 74px 12px 20px;
             }
 
             .header-container {
                 grid-template-columns: 1fr;
-                padding: 22px;
+                padding: 18px;
+                gap: 16px;
+                margin-bottom: 16px;
             }
+
+            .brand-mark { width: 40px; height: 40px; margin-bottom: 14px; }
+            .brand-mark svg { width: 22px; height: 22px; }
+
+            .main-title { font-size: clamp(1.6rem, 7vw, 2.4rem); }
+            .sub-title { font-size: 0.88rem; margin-top: 10px; }
 
             .header-meta {
                 min-width: 0;
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
-            .section-bar,
-            .social-section {
+            .meta-card { padding: 10px 12px; }
+            .meta-label { font-size: 0.76rem; }
+            .meta-value { font-size: 1rem; }
+
+            .section-bar {
                 align-items: flex-start;
                 flex-direction: column;
+                gap: 4px;
+                margin-bottom: 12px;
             }
+
+            .section-title { font-size: 0.95rem; }
+            .section-note { font-size: 0.85rem; }
 
             .tools-grid {
                 grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 16px;
             }
 
             .tool-card {
                 min-height: 0;
+                padding: 18px;
             }
+
+            .tool-title { font-size: 1.05rem; min-height: 0; }
+            .tool-desc { font-size: 0.88rem; margin: 8px 0 18px; }
+            .btn-main { min-height: 42px; font-size: 0.88rem; }
+            .icon-wrapper { width: 42px; height: 42px; flex: 0 0 42px; }
+            .icon-wrapper svg { width: 21px; height: 21px; }
+
+            .social-section {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 14px;
+                padding: 16px 18px;
+            }
+
+            .social-title { font-size: 0.9rem; }
+            .social-links { gap: 8px; flex-wrap: wrap; }
+            .social-btn { min-height: 40px; padding: 0 12px; font-size: 0.82rem; }
+
+            .footer { font-size: 0.8rem; padding: 18px 0 4px; }
 
             .settings-trigger {
                 top: 16px;
                 right: 16px;
+                min-height: 40px;
+                padding: 0 11px;
+                font-size: 0.78rem;
             }
 
             .corner-logo {
                 top: 16px;
                 left: 16px;
-                width: 48px;
-                height: 48px;
-                padding: 7px;
+                width: 44px;
+                height: 44px;
+                padding: 6px;
             }
 
-            .settings-panel {
-                padding: 22px;
-            }
+            .settings-panel { padding: 18px; }
 
             .settings-social {
                 flex-direction: column;
@@ -1432,6 +1513,14 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
                     <span id="btnLoginText">ĐĂNG NHẬP</span>
                 </button>
+            </div>
+            <div class="login-lang-wrap">
+                <svg class="login-lang-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <select class="login-lang-select" id="loginLangSelect" aria-label="Chọn ngôn ngữ">
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="en">English</option>
+                    <option value="zh-Hant">繁體中文</option>
+                </select>
             </div>
         </div>
     </div>
@@ -1590,6 +1679,26 @@
                 updating: 'ĐANG CẬP NHẬT',
                 maintenance: 'ĐANG BẢO TRÌ',
                 footer: 'Tất cả quyền được bảo lưu &copy; 2026 - SGM NETWORK',
+                // Login page
+                loginSubtitle: 'Đăng nhập để tiếp tục',
+                loginUsernameLabel: 'Tên đăng nhập',
+                loginUsernamePlaceholder: 'Nhập tên đăng nhập',
+                loginPasswordLabel: 'Mật khẩu',
+                loginPasswordPlaceholder: 'Nhập mật khẩu',
+                loginTogglePw: 'Hiện/ẩn mật khẩu',
+                loginBtn: 'ĐĂNG NHẬP',
+                loginErrorWrongCred: 'Tên đăng nhập hoặc mật khẩu không đúng.',
+                loginErrorEmptyUser: 'Vui lòng nhập tên đăng nhập.',
+                loginErrorEmptyPass: 'Vui lòng nhập mật khẩu.',
+                loginLangLabel: 'Chọn ngôn ngữ',
+                // Banned popup
+                bannedTitle: 'Tài khoản bị khóa',
+                bannedMessage: 'Tài khoản {user} đã bị khóa vĩnh viễn do bạn đã hết ủy quyền của SGM Network hoặc cố tình thực hiện một cuộc tấn công mạng.',
+                bannedClose: 'Đóng',
+                // Logout / welcome
+                welcomeText: 'Xin chào,',
+                logoutText: 'Đăng xuất',
+                logoutLabel: 'Đăng xuất',
                 titles: siteData.tools.map(tool => tool.title),
                 descriptions: siteData.tools.map(tool => tool.desc)
             },
@@ -1619,6 +1728,26 @@
                 updating: 'UPDATING',
                 maintenance: 'MAINTENANCE',
                 footer: 'All rights reserved &copy; 2026 - SGM NETWORK',
+                // Login page
+                loginSubtitle: 'Sign in to continue',
+                loginUsernameLabel: 'Username',
+                loginUsernamePlaceholder: 'Enter your username',
+                loginPasswordLabel: 'Password',
+                loginPasswordPlaceholder: 'Enter your password',
+                loginTogglePw: 'Show/hide password',
+                loginBtn: 'SIGN IN',
+                loginErrorWrongCred: 'Incorrect username or password.',
+                loginErrorEmptyUser: 'Please enter your username.',
+                loginErrorEmptyPass: 'Please enter your password.',
+                loginLangLabel: 'Select language',
+                // Banned popup
+                bannedTitle: 'Account Suspended',
+                bannedMessage: 'Account {user} has been permanently banned because your SGM Network authorization has expired or you attempted a cyberattack.',
+                bannedClose: 'Close',
+                // Logout / welcome
+                welcomeText: 'Hello,',
+                logoutText: 'Sign out',
+                logoutLabel: 'Sign out',
                 titles: [
                     'FF EVENT UPDATES',
                     'FREE FIRE ITEMS IMAGE COLLECTION',
@@ -1666,6 +1795,26 @@
                 updating: '更新中',
                 maintenance: '維護中',
                 footer: '版權所有 &copy; 2026 - SGM NETWORK',
+                // Login page
+                loginSubtitle: '登入以繼續',
+                loginUsernameLabel: '使用者名稱',
+                loginUsernamePlaceholder: '請輸入使用者名稱',
+                loginPasswordLabel: '密碼',
+                loginPasswordPlaceholder: '請輸入密碼',
+                loginTogglePw: '顯示/隱藏密碼',
+                loginBtn: '登入',
+                loginErrorWrongCred: '使用者名稱或密碼不正確。',
+                loginErrorEmptyUser: '請輸入使用者名稱。',
+                loginErrorEmptyPass: '請輸入密碼。',
+                loginLangLabel: '選擇語言',
+                // Banned popup
+                bannedTitle: '帳號已停用',
+                bannedMessage: '帳號 {user} 已被永久封鎖，因為您的 SGM Network 授權已到期或您試圖進行網路攻擊。',
+                bannedClose: '關閉',
+                // Logout / welcome
+                welcomeText: '您好，',
+                logoutText: '登出',
+                logoutLabel: '登出',
                 titles: [
                     'FF 活動更新',
                     'Free Fire 物品圖片收藏',
@@ -1745,6 +1894,8 @@
             const translations = languageData[currentLanguage];
 
             document.documentElement.lang = currentLanguage;
+
+            // ── Main page ──
             document.getElementById('settingsTriggerLabel').textContent = translations.settingsTrigger;
             document.getElementById('loadingStatus').textContent = translations.loadingStatus;
             document.getElementById('settingsTrigger').setAttribute('aria-label', translations.settingsOpenLabel);
@@ -1765,8 +1916,79 @@
             document.getElementById('toolsNote').textContent = translations.toolsNote;
             document.getElementById('socialTitle').textContent = translations.socialSection;
             document.getElementById('languageSelect').value = currentLanguage;
+
+            // ── Login page ──
+            const loginSubtitleEl = document.querySelector('.login-subtitle');
+            if (loginSubtitleEl) loginSubtitleEl.textContent = translations.loginSubtitle;
+
+            const loginUsernameLabel = document.querySelector('label[for="loginUsername"]');
+            if (loginUsernameLabel) loginUsernameLabel.textContent = translations.loginUsernameLabel;
+
+            const loginUsernameInput = document.getElementById('loginUsername');
+            if (loginUsernameInput) loginUsernameInput.placeholder = translations.loginUsernamePlaceholder;
+
+            const loginPasswordLabel = document.querySelector('label[for="loginPassword"]');
+            if (loginPasswordLabel) loginPasswordLabel.textContent = translations.loginPasswordLabel;
+
+            const loginPasswordInput = document.getElementById('loginPassword');
+            if (loginPasswordInput) loginPasswordInput.placeholder = translations.loginPasswordPlaceholder;
+
+            const togglePwBtn = document.getElementById('togglePw');
+            if (togglePwBtn) togglePwBtn.setAttribute('aria-label', translations.loginTogglePw);
+
+            const btnLoginText = document.getElementById('btnLoginText');
+            if (btnLoginText) btnLoginText.textContent = translations.loginBtn;
+
+            const loginLangSelect = document.getElementById('loginLangSelect');
+            if (loginLangSelect) {
+                loginLangSelect.setAttribute('aria-label', translations.loginLangLabel);
+                loginLangSelect.value = currentLanguage;
+            }
+
+            // ── Banned popup ──
+            const bannedTitleEl = document.getElementById('bannedTitle');
+            if (bannedTitleEl) bannedTitleEl.textContent = translations.bannedTitle;
+
+            const bannedMsgEl = document.querySelector('.banned-message');
+            const bannedUsernameEl = document.getElementById('bannedUsername');
+            if (bannedMsgEl && bannedUsernameEl) {
+                // Rebuild message giữ nguyên <strong> chứa username
+                const currentUser = bannedUsernameEl.textContent;
+                bannedMsgEl.innerHTML = `${translations.bannedMessage.replace('{user}', `<strong id="bannedUsername">${currentUser}</strong>`)}`;
+            }
+
+            const btnBannedClose = document.getElementById('btnBannedClose');
+            if (btnBannedClose) {
+                btnBannedClose.childNodes.forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+                        node.textContent = ' ' + translations.bannedClose;
+                    }
+                });
+            }
+
+            // ── Logout / welcome ──
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.setAttribute('aria-label', translations.logoutLabel);
+                logoutBtn.childNodes.forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+                        node.textContent = ' ' + translations.logoutText;
+                    }
+                });
+            }
+
+            const loginWelcome = document.getElementById('loginWelcome');
+            if (loginWelcome) {
+                // Cập nhật text "Xin chào," giữ nguyên phần <strong>
+                loginWelcome.childNodes.forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+                        node.textContent = ' ' + translations.welcomeText + ' ';
+                    }
+                });
+            }
+
             localStorage.setItem('sgm-language', currentLanguage);
-            renderToolsGrid();
+            if (AUTH.isLoggedIn()) renderToolsGrid();
         }
 
         function initScrollObserver() {
@@ -1910,6 +2132,7 @@
             const bannedBackdrop  = document.getElementById('bannedBackdrop');
             const bannedUsername  = document.getElementById('bannedUsername');
             const btnBannedClose  = document.getElementById('btnBannedClose');
+            const loginLangSelect = document.getElementById('loginLangSelect');
 
             // Đồng bộ logo login với theme
             const syncLoginLogo = () => {
@@ -1935,26 +2158,35 @@
 
             const setLoading = (on) => {
                 btnLogin.disabled = on;
-                btnLoginText.textContent = on ? '' : 'ĐĂNG NHẬP';
+                const loginBtnLabel = languageData[currentLanguage].loginBtn;
                 btnLogin.innerHTML = on
                     ? '<span class="spinner"></span>'
-                    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg><span id="btnLoginText">ĐĂNG NHẬP</span>`;
+                    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg><span id="btnLoginText">${loginBtnLabel}</span>`;
             };
 
             const doLogin = () => {
                 clearError();
                 const u = usernameInput.value.trim();
                 const p = passwordInput.value;
+                const t = languageData[currentLanguage];
 
-                if (!u) { showError('Vui lòng nhập tên đăng nhập.'); usernameInput.focus(); return; }
-                if (!p) { showError('Vui lòng nhập mật khẩu.'); passwordInput.focus(); return; }
+                if (!u) { showError(t.loginErrorEmptyUser); usernameInput.focus(); return; }
+                if (!p) { showError(t.loginErrorEmptyPass); passwordInput.focus(); return; }
 
                 setLoading(true);
                 // Giả lập delay xác thực nhẹ cho UX
                 setTimeout(() => {
                     if (AUTH.isBanned(u, p)) {
                         setLoading(false);
+                        const t = languageData[currentLanguage];
                         bannedUsername.textContent = u;
+                        document.querySelector('.banned-message').innerHTML =
+                            t.bannedMessage.replace('{user}', `<strong id="bannedUsername">${u}</strong>`);
+                        document.getElementById('bannedTitle').textContent = t.bannedTitle;
+                        document.getElementById('btnBannedClose').childNodes.forEach(node => {
+                            if (node.nodeType === Node.TEXT_NODE && node.textContent.trim())
+                                node.textContent = ' ' + t.bannedClose;
+                        });
                         bannedBackdrop.classList.remove('hidden');
                         passwordInput.value = '';
                     } else if (AUTH.login(u, p)) {
@@ -1967,7 +2199,7 @@
                         initApp();
                     } else {
                         setLoading(false);
-                        showError('Tên đăng nhập hoặc mật khẩu không đúng.');
+                        showError(languageData[currentLanguage].loginErrorWrongCred);
                         passwordInput.value = '';
                         passwordInput.focus();
                     }
@@ -1984,6 +2216,18 @@
             });
 
             btnLogin.addEventListener('click', doLogin);
+
+            // Đổi ngôn ngữ từ login page
+            if (loginLangSelect) {
+                loginLangSelect.value = currentLanguage;
+                loginLangSelect.addEventListener('change', () => {
+                    applyLanguage(loginLangSelect.value);
+                    // Giữ focus ở chỗ người dùng đang nhập
+                    if (document.activeElement !== usernameInput && document.activeElement !== passwordInput) {
+                        usernameInput.focus();
+                    }
+                });
+            }
 
             // Đóng popup banned
             btnBannedClose.addEventListener('click', () => {
