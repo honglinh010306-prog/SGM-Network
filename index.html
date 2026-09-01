@@ -1701,9 +1701,109 @@
             }
         }
 
+
+        /* ── EVENT BUBBLE ── */
+        .event-bubble-wrap {
+            position: fixed;
+            z-index: 9998;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .event-bubble-wrap:active { cursor: grabbing; }
+
+        .event-bubble-link {
+            display: block;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 3px rgba(53, 194, 255, 0.4),
+                0 0 22px rgba(53, 194, 255, 0.35),
+                0 8px 24px rgba(0,0,0,0.4);
+            transition: box-shadow 0.2s, transform 0.15s;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .event-bubble-link::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.22) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .event-bubble-link:hover {
+            box-shadow:
+                0 0 0 4px rgba(53, 194, 255, 0.65),
+                0 0 32px rgba(53, 194, 255, 0.55),
+                0 12px 30px rgba(0,0,0,0.45);
+            transform: scale(1.06);
+        }
+
+        .event-bubble-link img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+            border-radius: 50%;
+        }
+
+        .event-bubble-timer {
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #f7f9fc;
+            background: rgba(10, 15, 25, 0.82);
+            border: 1px solid rgba(53, 194, 255, 0.3);
+            border-radius: 999px;
+            padding: 3px 9px;
+            white-space: nowrap;
+            letter-spacing: 0.04em;
+            text-align: center;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
+            pointer-events: none;
+        }
+
+        .event-bubble-timer.ended {
+            background: #dc2626;
+            color: #fff;
+            border-color: #ff6b6b;
+            letter-spacing: 0.06em;
+            font-family: var(--font-main);
+        }
+
+        @keyframes bubblePulse {
+            0%, 100% { box-shadow: 0 0 0 3px rgba(53,194,255,0.4), 0 0 22px rgba(53,194,255,0.35), 0 8px 24px rgba(0,0,0,0.4); }
+            50%       { box-shadow: 0 0 0 5px rgba(53,194,255,0.6), 0 0 36px rgba(53,194,255,0.55), 0 8px 24px rgba(0,0,0,0.4); }
+        }
+
+        .event-bubble-link { animation: bubblePulse 2.8s ease-in-out infinite; }
+        .event-bubble-link:hover { animation: none; }
+        /* ── END EVENT BUBBLE ── */
+
     </style>
 </head>
 <body>
+
+    <!-- EVENT BUBBLE -->
+    <div class="event-bubble-wrap" id="eventBubble" style="bottom:100px;right:28px;">
+        <a class="event-bubble-link" id="eventBubbleLink" href="https://event-ffvn-sgm.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Xem sự kiện">
+            <img src="./6da42b2c-8b1c-4ce5-9095-42e382173c71.png" alt="Sự kiện FF" draggable="false">
+        </a>
+        <div class="event-bubble-timer" id="eventBubbleTimer">--:--:--</div>
+    </div>
 
     <div class="corner-logo" aria-label="Logo SGM Network">
         <img id="cornerLogo" src="./LOGO%20PNG_LOGO%20WHITE.png" alt="Logo SGM Network">
@@ -2883,6 +2983,121 @@
             if (!_loginInit) { _loginInit = true; initLogin(); }
             initApp();
         }
+
+        /* ── EVENT BUBBLE ── */
+        (function() {
+            const wrap   = document.getElementById('eventBubble');
+            const link   = document.getElementById('eventBubbleLink');
+            const timer  = document.getElementById('eventBubbleTimer');
+            const END    = new Date('2026-09-06T23:59:59');
+
+            // ── Đếm ngược ──
+            function updateTimer() {
+                const now  = new Date();
+                const diff = END - now;
+
+                if (diff <= 0) {
+                    timer.textContent = 'ĐÃ KẾT THÚC';
+                    timer.classList.add('ended');
+                    link.removeAttribute('href');
+                    link.style.cursor = 'default';
+                    return;
+                }
+
+                const h  = Math.floor(diff / 3600000);
+                const m  = Math.floor((diff % 3600000) / 60000);
+                const s  = Math.floor((diff % 60000) / 1000);
+                const dd = Math.floor(diff / 86400000);
+
+                if (dd > 0) {
+                    timer.textContent = dd + 'N ' +
+                        String(h % 24).padStart(2,'0') + ':' +
+                        String(m).padStart(2,'0') + ':' +
+                        String(s).padStart(2,'0');
+                } else {
+                    timer.textContent =
+                        String(h).padStart(2,'0') + ':' +
+                        String(m).padStart(2,'0') + ':' +
+                        String(s).padStart(2,'0');
+                }
+
+                setTimeout(updateTimer, 1000);
+            }
+            updateTimer();
+
+            // ── Drag (mouse + touch) ──
+            let dragging = false, startX, startY, origLeft, origBottom, origRight, origTop;
+
+            function getPos() {
+                const r = wrap.getBoundingClientRect();
+                return { left: r.left, top: r.top };
+            }
+
+            function onDragStart(cx, cy) {
+                dragging  = true;
+                startX    = cx;
+                startY    = cy;
+                const pos = getPos();
+                origLeft  = pos.left;
+                origTop   = pos.top;
+                wrap.style.right  = 'auto';
+                wrap.style.bottom = 'auto';
+                wrap.style.left   = origLeft + 'px';
+                wrap.style.top    = origTop  + 'px';
+                wrap.style.transition = 'none';
+            }
+
+            function onDragMove(cx, cy) {
+                if (!dragging) return;
+                const dx = cx - startX;
+                const dy = cy - startY;
+                let newLeft = origLeft + dx;
+                let newTop  = origTop  + dy;
+                // Giữ trong viewport
+                const vw = window.innerWidth  - wrap.offsetWidth;
+                const vh = window.innerHeight - wrap.offsetHeight;
+                newLeft = Math.max(0, Math.min(newLeft, vw));
+                newTop  = Math.max(0, Math.min(newTop,  vh));
+                wrap.style.left = newLeft + 'px';
+                wrap.style.top  = newTop  + 'px';
+            }
+
+            function onDragEnd(cx, cy) {
+                if (!dragging) return;
+                const moved = Math.abs(cx - startX) + Math.abs(cy - startY);
+                dragging = false;
+                // Nếu chỉ click (di chuyển < 6px) thì cho phép link mở
+                if (moved < 6 && link.href) {
+                    window.open(link.href, '_blank', 'noopener,noreferrer');
+                }
+            }
+
+            // Mouse
+            wrap.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                onDragStart(e.clientX, e.clientY);
+            });
+            document.addEventListener('mousemove', (e) => onDragMove(e.clientX, e.clientY));
+            document.addEventListener('mouseup',   (e) => onDragEnd(e.clientX, e.clientY));
+
+            // Touch
+            wrap.addEventListener('touchstart', (e) => {
+                const t = e.touches[0];
+                onDragStart(t.clientX, t.clientY);
+            }, { passive: true });
+            document.addEventListener('touchmove', (e) => {
+                const t = e.touches[0];
+                onDragMove(t.clientX, t.clientY);
+            }, { passive: true });
+            document.addEventListener('touchend', (e) => {
+                const t = e.changedTouches[0];
+                onDragEnd(t.clientX, t.clientY);
+            });
+
+            // Ngăn thẻ <a> mở link khi drag (chỉ mở khi click thực sự)
+            link.addEventListener('click', (e) => e.preventDefault());
+        })();
+        /* ── END EVENT BUBBLE ── */
     </script>
 </body>
 </html>
